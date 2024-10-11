@@ -33,3 +33,9 @@ if __name__ == '__main__':
     # > --count_parse_start 0
     # > --count_parse_end 4
 
+    # try to rename ic_back_hdpi.png -> ic_back.png
+    #  excute$ python /local path/renameFile.py
+    # > --file_dir "file dir"
+    # > --reset_name ""
+    # > --count_parse_start 0
+    # > --count_parse_end 9
