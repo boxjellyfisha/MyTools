@@ -19,10 +19,10 @@ def main(arg):
 	if not is_args_valid(lang_types, xmls, output_file_path):
 		return
 
-	select_df = xmls_to_data_frame(lang_types, xmls, output_file_path, is_sort_by_alphabet)
+	select_df = xmls_to_data_frame(lang_types, xmls, is_sort_by_alphabet)
 	return data_frame_to_table_file(output_file_path, select_df) 
 
-def xmls_to_data_frame(lang_types, xmls, output_file_path, is_sort_by_alphabet):
+def xmls_to_data_frame(lang_types, xmls, is_sort_by_alphabet):
 	lang_types_unique = list(dict.fromkeys(lang_types))
 
 	lang_count = len(lang_types_unique) # the total count of language
@@ -82,17 +82,20 @@ file file_name1.xml: (en)
 <str name = stringkey1>value1_en</str>
 <str name = stringkey2>value2_en</str>
 
-file file_name2.xml: (ch)
+file file_name2.xml: (en)
+<str name = stringkey3>value3_en</str>
+
+file file_name1.xml: (ch)
 <str name = stringkey1>value1_ch</str>
 <str name = stringkey2>value2_ch</str>
 
 => like:
  categories=[
-	{ stringkey1: file_name1, stringkey2:file_name1 },
-	{ stringkey1: file_name2, stringkey2:file_name2 }
+	{ stringkey1: file_name1, stringkey2:file_name1, stringkey3: file_name2 },
+	{ stringkey1: file_name1, stringkey2:file_name1 }
  ]
  maps= [
-	{ stringkey1: value1_en, stringkey2: value2_en },
+	{ stringkey1: value1_en, stringkey2: value2_en, stringkey3: value3_en },
 	{ stringkey1: value1_ch, stringkey2: value2_ch }
  ]
 """  
@@ -130,10 +133,10 @@ def parse_xml_to_maps(lang_types_unique, lang_types, xml_path):
 move the columes data saving in value_maps as row to save_lists
 save_lists like:
 [
-	[stringkey1, stringkey2],
-	[value1_en, value2_en],
-	[value1_ch, value2_ch],
-	[file_name1, file_name1]
+	[stringkey1, stringkey2, stringkey3], // id
+	[value1_en,  value2_en,  value3_en ], // en
+	[value1_ch,  value2_ch,  nan       ], // ch
+	[file_name1, file_name1, file_name2]  // category
 ]
 """
 def put_data_into_columns(value_categories, value_maps, save_lists):	

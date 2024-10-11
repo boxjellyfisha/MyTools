@@ -22,7 +22,6 @@ install pip
 >
 > pip install xlwt (supporting  for write excel .xls)
 >
->
 > pip3.12 install xlsxwriter --break-system-packages (supporting  for write excel .xlsx)
 >
 > pip3.12 install openpyxl --break-system-packages (supporting for read excel .xlsx)
@@ -35,45 +34,49 @@ install pip
 
 #### 2. Run strTranslator
 
-use for translate the source csv/xls file to string file for android and iOS.
+This script demonstrates how to parse CSV/Excel files, extract strings, and generate string files suitable for Android and iOS development:
 
 ```shell
-sudo python strTranslator.py /Users/tutkrd1/Documents/test.csv /Users/tutkrd1/Documents/test
+python3 strTranslator.py \
+--input /Users/kellyhong/Documents/tool/MyTools/en/output.xlsx \
+--output /Users/kellyhong/Documents/tool/MyTools/en \
+-c
 ```
 
-```shell
-sudo python strTranslator.py /Users/tutkrd1/Documents/suvilo/string20201228.xls /Users/tutkrd1/Documents/suvilo/str_table
-```
-
-sudo python strTranslator.py /Users/kellyhong/Documents/doc-Maifar/string20230427.xls /Users/kellyhong/Documents/doc-Maifar/str-table
 
 #### 3. Run xml2csv
 
-use for parsing string from android xml file and write in csv/xls file.
+This script demonstrates how to parse strings from Android XML files and write them to a CSV/Excel file.
 
 ```shell
-sudo python xml2csv.py \
---language en,zh-rCN \
---xml /Users/tutkrd1/Documents/test/en/strings.xml,/Users/tutkrd1/Documents/test/zh-rCN/strings.xml \
---output /Users/tutkrd1/Documents/test.csv 
-```
-
-```shell
-sudo python xml2csv.py \
+python xml2csv.py \
 --language en \
 --xml /Users/tutkrd1/Documents/workspace/android_aioto/app/src/main/res/values/strings.xml \
 --output /Users/tutkrd1/Documents/suvilo/string20200903.xls 
 ```
 
-sudo python xml2csv.py 
---language en,zh-rCN 
---xml /Users/kellyhong/Documents/workspace/android_suvilo.aioto/app/src/main/res/values/strings.xml,/Users/kellyhong/Documents/workspace/android_suvilo.aioto/app/src/main/res/values-zh-rTW/strings.xml 
---output /Users/kellyhong/Documents/doc-Suvilo/string20220822.xls
+```shell
+python3 xml2csv.py \
+--language en,en,ch \
+--xml /Users/kellyhong/Documents/tool/MyTools/en/try.xml,/Users/kellyhong/Documents/tool/MyTools/en/try2.xml,/Users/kellyhong/Documents/tool/MyTools/en/try3.xml \
+--output /Users/kellyhong/Documents/tool/MyTools/en/output.xlsx
+```
 
-sudo python xml2csv.py 
---language en 
---xml /Users/kellyhong/Documents/workspace/android_modula/library/src/main/res/values/strings.xml 
---output /Users/kellyhong/Documents/doc-Module/string20240522.xls
+
+
+#### 4. Run groupingToCategory
+
+This script demonstrates how to grouping strings from Android XML files and write them to a CSV/Excel file.
+
+xml to xlsx with categories:
+
+```shell
+python3 groupingToCategory.py \
+--source /Users/kellyhong/Documents/tool/MyTools/en/en/strings.xml \
+--output /Users/kellyhong/Documents/tool/MyTools/en/ca_output.xlsx \
+--rules /Users/kellyhong/Documents/tool/MyTools/en/try.xml,/Users/kellyhong/Documents/tool/MyTools/en/try2.xml
+```
+
 
 ---
 
@@ -96,7 +99,6 @@ source ~/.bash_profile
 done!
 
 ---
-
 
 Use `--break-system-packages` as an argument for `pip`.
 

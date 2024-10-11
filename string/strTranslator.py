@@ -9,7 +9,7 @@ from id_key_configs import ID_CATEGORY as ID_CATEGORY
 reload(sys)
 # sys.setdefaultencoding("utf-8") for pyhton2.x only
 
-export_dir = ""
+# export_dir = ""
 
 def main(args):
 	if args.input == '' or args.output == '':
@@ -17,33 +17,24 @@ def main(args):
 		return
 
 	file_dir = args.input
-	global export_dir 
+	# global export_dir 
 	export_dir = args.output
+	is_category_sliced = args.category_sliced
 
 	df = to_data_frame(file_dir, args.sort) 
 	if(df is None):
 		return
 
-	lang_count = df.columns.size
-	categorys = df[ID_CATEGORY]
+	data_frame_to_strings_file(export_dir, df, is_category_sliced)
 
-	for i in range(1, lang_count):
-		lang = str(df.columns[i])
-		if lang != 'nan' and lang != ID_CATEGORY:
-			if(args.category_sliced):
-				transform_to_multiple_files(df, lang, categorys)
-			else:	
-				transform_to_single_file(df, lang, "strings")
-	print("translate finish!")
-
-def to_data_frame(file_dir, is_sort_by_alphabet):
-	file_type = file_dir.split(".")[1]
+def to_data_frame(file_path, is_sort_by_alphabet):
+	file_type = file_path.split(".")[1]
 	if file_type == "csv":
-		df = pd.read_csv(file_dir)
+		df = pd.read_csv(file_path)
 	elif file_type == "xlsx": # after year 2010
-		df = pd.read_excel(file_dir)
+		df = pd.read_excel(file_path)
 	elif file_type == "xls":  # before year 2010
-		df = pd.read_excel(file_dir)
+		df = pd.read_excel(file_path)
 	else: 
 		print("The input file type is not support!")
 		return
@@ -53,15 +44,27 @@ def to_data_frame(file_dir, is_sort_by_alphabet):
 		
 	return df
 
-def transform_to_multiple_files(df, lang, categorys):
+def data_frame_to_strings_file(export_dir, df, is_category_sliced):
+    lang_count = df.columns.size
+    categorys = df[ID_CATEGORY]
+
+    for i in range(1, lang_count):
+     lang = str(df.columns[i])
+     if lang != 'nan' and lang != ID_CATEGORY:
+      if(is_category_sliced):
+       transform_to_multiple_files(df, export_dir, lang, categorys)
+      else:	
+       transform_to_single_file(df, export_dir, lang, "strings")
+
+def transform_to_multiple_files(df, export_dir, lang, categorys):
 	unique_categorys = list(dict.fromkeys(categorys))
 	print(unique_categorys)
 	for c in unique_categorys:
 		current_df = df.where(df[ID_CATEGORY] == c).get([ID, lang])
-		transform_to_single_file(current_df, lang, c)
+		transform_to_single_file(current_df, export_dir, lang, c)
 
-def transform_to_single_file(df, lang, name):
-	ios_f, android_f = create_output_files(lang= lang, name=name)
+def transform_to_single_file(df, export_dir, lang, name):
+	ios_f, android_f = create_output_files(export_dir = export_dir, lang= lang, name=name)
 	row_size = df[ID].size
 	
 	android_f.write("<resources>\n")
@@ -77,7 +80,7 @@ def transform_to_single_file(df, lang, name):
 	ios_f.close()
 	android_f.close()
 
-def create_output_files(lang, name):
+def create_output_files(export_dir, lang, name):
 	n_path = export_dir + "/" + lang + "/"
 	print(n_path)
 	check_dir(n_path) 
@@ -123,6 +126,7 @@ def parse_arg(argv):
 
 if __name__ == '__main__':
 	main(parse_arg(sys.argv[1:]))
+	print("> Translate finish!")
 	# 1.csv file path
 	# 2.want to export's file dir
 	#
