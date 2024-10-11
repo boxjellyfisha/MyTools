@@ -3,14 +3,13 @@ from importlib import reload
 import os
 import sys
 import pandas as pd
+from id_key_configs import ID as ID
+from id_key_configs import ID_CATEGORY as ID_CATEGORY
 
 reload(sys)
 # sys.setdefaultencoding("utf-8") for pyhton2.x only
 
 export_dir = ""
-
-ID = 'id'
-ID_CATEGORY = 'category'
 
 def main(args):
 	if args.input == '' or args.output == '':

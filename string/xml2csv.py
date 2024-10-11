@@ -4,13 +4,11 @@ import argparse
 import pandas as pd
 import xml.etree.ElementTree as ET
 from tqdm import tqdm
-
+from id_key_configs import ID as ID
+from id_key_configs import ID_CATEGORY as ID_CATEGORY
 
 reload(sys)
 # sys.setdefaultencoding("utf-8") for pyhton2.x only
-
-ID = 'id'
-ID_CATEGORY = 'category'
 
 def main(arg):
 	lang_types = arg.language.split(",")
