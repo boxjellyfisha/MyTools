@@ -18,19 +18,14 @@ def main(arg):
 	output_file_path = arg.output
 	is_sort_by_alphabet = arg.sort
 
+	if not is_args_valid(lang_types, xmls, output_file_path):
+		return
+
 	select_df = xmls_to_data_frame(lang_types, xmls, output_file_path, is_sort_by_alphabet)
 	return data_frame_to_table_file(output_file_path, select_df) 
 
 def xmls_to_data_frame(lang_types, xmls, output_file_path, is_sort_by_alphabet):
 	lang_types_unique = list(dict.fromkeys(lang_types))
-	
-	if len(lang_types) != len(xmls):
-		print("The input count isnot same!")
-		return
-	
-	if output_file_path == '' or len(xmls) == 0:
-		print("The input is missed!")
-		return
 
 	lang_count = len(lang_types_unique) # the total count of language
 	sort_title = [ID]                   # put the header row ['id', 'en', ...]
@@ -55,6 +50,17 @@ def xmls_to_data_frame(lang_types, xmls, output_file_path, is_sort_by_alphabet):
 	if(is_sort_by_alphabet): 
 		select_df = select_df.sort_values(by='id')
 	return select_df
+
+def is_args_valid(lang_types, xmls, output_file_path):
+    is_valid_args = True
+    if len(lang_types) != len(xmls):
+     print("The input count isnot same!")
+     is_valid_args = False
+	
+    if output_file_path == '' or len(xmls) == 0:
+     print("The input is missed!")
+     is_valid_args = False
+    return is_valid_args
 
 def data_frame_to_table_file(output_file_path, select_df):
 	file_type = output_file_path.split(".")[1]
