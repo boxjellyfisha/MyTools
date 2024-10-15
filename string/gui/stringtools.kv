@@ -1,0 +1,114 @@
+#:kivy 2.3.0
+#:import pages func.pages
+#:import PAGE_STR_TRANSLATOR func.pages.PAGE_STR_TRANSLATOR
+#:import PAGE_XML_CSV func.pages.PAGE_XML_CSV
+#:import PAGE_GROUPING_CATEGORY func.pages.PAGE_GROUPING_CATEGORY
+#:import FadeTransition kivy.uix.screenmanager.FadeTransition
+
+<Title@MDLabel>
+	halign: "center"
+	font_style: "Display"
+	role: "small"
+
+<HintLabel@MDLabel>
+	font_style: "Label"
+	role: "medium"
+
+<MenuItemButton@MDButton>
+	size_hint: None, None
+	radius: dp(4)
+
+<MyDivider@MDDivider>
+	size_hint_x: 1
+	pos_hint: {'center_x': .5, 'center_y': .5}
+	divider_width: dp(20)
+	color: (0,0,0,0)
+
+<MenuScreen>:
+	id: parent_screen_id
+    label_wid: label_custom_wid
+	navigator: navigator_id
+
+	DrawerNavigation:
+		id: navigator_id
+		size_hint: 1,1
+
+	ScreenManager:
+		id: screen_manager
+		transition:
+			FadeTransition(duration=.2, clearcolor=(0,0,0,0))	
+
+	HintLabel:
+		padding_x: dp(20)
+		padding_y: dp(50)
+		id: label_custom_wid
+		text: pages.PAGE_MENU
+		size_hint: 1,.1
+
+<CommonNavigationRailItem>:
+    MDNavigationRailItemIcon:
+        icon: root.icon
+    MDNavigationRailItemLabel:
+        text: root.text
+
+<DrawerNavigation>:
+	type: "selected"
+
+	CommonNavigationRailItem:
+		icon: "home"
+		text: pages.PAGE_MENU
+		on_active: root.switch_item(pages.PAGE_MENU)
+
+	CommonNavigationRailItem:
+		icon: "transition"
+		text: PAGE_STR_TRANSLATOR
+		on_active: root.switch_item(PAGE_STR_TRANSLATOR)
+
+	CommonNavigationRailItem:
+		icon: "xml"
+		text: PAGE_XML_CSV
+		on_active: root.switch_item(PAGE_XML_CSV)
+
+	CommonNavigationRailItem:
+		icon: "group"
+		text: PAGE_GROUPING_CATEGORY	
+		on_active: root.switch_item(PAGE_GROUPING_CATEGORY)
+
+<HomeScreen>:
+	RelativeLayout:
+		size_hint: 1, 1
+        Title:
+            text: "String table tools menu"
+			pos_hint: {'center_x': .5, 'y': .8}
+            size_hint: 1,.1
+
+        MDBoxLayout:
+            border: 10, 10, 10, 10
+            orientation: "vertical"
+            padding: 20
+            pos_hint: {"center_x": 0.5 }
+            size_hint: .6,.7
+
+            MenuItemButton:
+                on_press: root.do_str_translator()    
+                MDButtonText:
+                    text: PAGE_STR_TRANSLATOR
+            HintLabel:
+                text: "Parse CSV/Excel files, extract strings, and generate string files suitable for Android and iOS development"
+            MyDivider:
+
+            MenuItemButton:
+                on_press: root.do_xml2csv()
+                MDButtonText:
+                    text: PAGE_XML_CSV
+            HintLabel:
+                text: "Strings from Android XML files and write them to a CSV/Excel file."  
+            MyDivider:
+
+            MenuItemButton:
+                on_press: root.do_grouping_to_category()
+                MDButtonText:
+                    text: PAGE_GROUPING_CATEGORY
+            HintLabel:
+                text: "Grouping strings from Android XML files."
+			MyDivider:
