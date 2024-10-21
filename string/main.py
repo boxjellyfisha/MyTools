@@ -12,6 +12,7 @@ import gui.DrawerNavigation as NV
 
 from gui.Xml2Csv import Xml2CsvScreen
 from gui.StrTransfor import StrTransforScreen
+from gui.GroupingToCategory import GroupingToCategoryScreen
 
 from kivymd.uix.screen import MDScreen
 
@@ -44,7 +45,9 @@ class StringToolsApp(MDApp):
             elif name_screen == Menu.PAGE_STR_TRANSLATOR:
                 screen = StrTransforScreen(name=name_screen)
             elif name_screen == Menu.PAGE_XML_CSV:
-                screen = Xml2CsvScreen(name=name_screen)    
+                screen = Xml2CsvScreen(name=name_screen)  
+            elif name_screen == Menu.PAGE_GROUPING_CATEGORY:
+                screen = GroupingToCategoryScreen(name=name_screen)      
             else :
                 screen = MDScreen(
                     name=name_screen,

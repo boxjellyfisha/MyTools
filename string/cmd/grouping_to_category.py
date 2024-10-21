@@ -5,7 +5,7 @@ import sys
 import pandas as pd
 from cmd.id_key_configs import ID, ID_CATEGORY
 from cmd import xml2csv
-from cmd import strTranslator
+from cmd import str_translator as strTranslator
 
 reload(sys)
 # sys.setdefaultencoding("utf-8") for pyhton2.x only
@@ -14,18 +14,29 @@ ID_TMP = 'source'
 
 def main(arg):
 	sorce_file_path = arg.source
-	sorce_file_type = sorce_file_path.split('.')[1] if "." in sorce_file_path else ""
 	output_file_path = arg.output
-	output_file_type = output_file_path.split(".")[1] if "." in output_file_path else ""
-	rules = arg.rules.split(",")
+	
 	is_sort_by_alphabet = arg.sort
 	is_show_old_value = arg.showold
-
+	
+	rules = arg.rules.split(",")
 	print(rules)
-
+	
+	try:
+		trans(sorce_file_path= sorce_file_path,
+	   	output_file_path=output_file_path,
+	   	rules=rules,
+	   	is_sort_by_alphabet=is_sort_by_alphabet,
+	   	is_show_old_value=is_show_old_value)
+	except Exception as e:
+		print(e)
+	
+def trans(sorce_file_path, output_file_path, rules, is_sort_by_alphabet, is_show_old_value):
 	if sorce_file_path == "":
-		print("The input is missed!")
-		return
+		raise Exception("The input is missed!")
+
+	sorce_file_type = sorce_file_path.split('.')[1] if "." in sorce_file_path else ""
+	output_file_type = output_file_path.split(".")[1] if "." in output_file_path else ""
 	
 	# create the DataFrame
 	df = None
@@ -34,8 +45,8 @@ def main(arg):
 	elif sorce_file_type == "csv" or sorce_file_type == "xlsx" or sorce_file_type == "xls":
 		df = strTranslator.to_data_frame(sorce_file_path, is_sort_by_alphabet)
 	else:
-		print("The source file type is not support!")
-		return
+		raise Exception("The source file type is not support!")
+		
 	df_final = df.drop(columns=[ID_CATEGORY])
 
 	# add category column
@@ -54,7 +65,7 @@ def main(arg):
 	if output_file_type == "":
 		strTranslator.data_frame_to_strings_file(output_file_path, df_final, True)
 	else:
-		xml2csv.data_frame_to_table_file(output_file_path, df_final)
+		xml2csv.data_frame_to_table_file(output_file_path, df_final)		
 	
 def parse_arg(argv):
 	parser = argparse.ArgumentParser()

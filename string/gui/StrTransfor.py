@@ -51,7 +51,7 @@ class StrTransforScreen(MDScreen):
 			self.hint.show(content="File generating is success!", output = export_dir)
 		except Exception as e:
 			Logger.error(e)
-			self.hint.show(content="Failed by:" + str(e))
+			self.hint.show(content="Failed by: " + str(e))
 
 class SmallButton(MDButton):
 	ui_text = ObjectProperty()
@@ -106,7 +106,8 @@ class FileSelector(MDBoxLayout):
 		content = str(self.selections)
 		self.ui_content = MDLabel(text=content, 
 						  pos_hint = {"center_y": .5},
-						  size_hint = [0.8, 1])
+						  size_hint = [0.8, 1],
+						  role="medium")
 		
 		self.add_widget(self.ui_content)
 
@@ -141,7 +142,7 @@ class FileSelector(MDBoxLayout):
 		via FileChoose.handle_selection.
 		'''
 		# App.get_running_app().root.ids.result.text = str(self.selection)
-		self.ui_content.text = str(self.selections)
+		self.ui_content.text = self.selections[0]
 
 
 class DirSelector(FileSelector):

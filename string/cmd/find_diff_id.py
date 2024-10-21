@@ -2,7 +2,7 @@ import argparse
 
 from cmd.id_key_configs import ID, ID_CATEGORY
 from cmd import xml2csv
-from cmd import strTranslator
+from cmd import str_translator as strTranslator
 
 ID_TMP = 'source'
 

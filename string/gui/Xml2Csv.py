@@ -2,7 +2,7 @@ import kivy
 
 kivy.require('2.3.0')
 
-from kivy.properties import StringProperty, ListProperty, ObjectProperty, ReferenceListProperty
+from kivy.properties import StringProperty, ListProperty, ObjectProperty, BooleanProperty
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDIconButton
@@ -55,7 +55,7 @@ class Xml2CsvScreen(MDScreen):
 			self.hint.show(content="File generating is success!", output = export_dir)
 		except Exception as e:
 			Logger.error(e)
-			self.hint.show(content="Failed by:" + str(e))
+			self.hint.show(content="Failed by: " + str(e))
 
 class FilesSelector(MDBoxLayout):
 	ui_button = ObjectProperty()
@@ -64,6 +64,8 @@ class FilesSelector(MDBoxLayout):
 	
 	title_name = StringProperty("hello")
 	selections = ListProperty([])
+	is_editable = BooleanProperty(True)
+	default_language = StringProperty("en")
 
 	def __init__(self, **kwargs): 
 		super(FilesSelector, self).__init__(**kwargs)
@@ -114,7 +116,8 @@ class FilesSelector(MDBoxLayout):
 			for s in selection:
 				self.selections.append({"text": s, 
 									    "pressed": self.remove_selection, 
-										"origin_lang":"en"})
+										"origin_lang": self.default_language,
+										"is_editable": self.is_editable})
 
 	def remove_selection(self, *a):
 		Logger.info(a)
@@ -139,6 +142,8 @@ class FilesSelector(MDBoxLayout):
 		file_dir = ""
 		is_first = True
 		for i in self.ui_content.children[0].children:
+			if not isinstance(i, Cell):
+				continue
 			if is_first:
 				is_first = False
 			else:
@@ -149,6 +154,7 @@ class FilesSelector(MDBoxLayout):
 		return languges, file_dir	
 
 class Cell(MDBoxLayout):
+	is_editable = BooleanProperty(True)
 	ui_text_field = ObjectProperty()
 	text = StringProperty()
 	origin_lang = StringProperty()

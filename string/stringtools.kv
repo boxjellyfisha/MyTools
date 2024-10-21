@@ -181,6 +181,7 @@
 			icon: "minus"
 	
 	MDTextField:
+		disabled: not root.is_editable
 		id: id_language
 		mode: "outlined"	
 		size_hint_x: None
@@ -193,6 +194,7 @@
 		adaptive_height: True
 		padding_x: "12dp"
 		pos_hint: {"center_y": .5}
+		role: "medium"
 
 <Xml2CsvScreen>:
 	BoxLayout:
@@ -205,6 +207,7 @@
 
 		MyDivider:	
 		FilesSelector:
+			is_editable: True
 			ui_content: id_recycler_view
 			id: id_file_dir
 			title_name: "Select input xml files"
@@ -228,14 +231,79 @@
 			size_hint: [1, .5]
 
 		CheckItem:
+			id: id_is_csv
+			text: "output file as .csv, default is .xlsx"
+			group: "root"	
+		
+		CheckItem:
+			id: id_is_sorted
+			text: "sort the strings by ID"
+			group: "root"
+
+		MyDivider:
+		
+		SmallButton:
+			id: id_done_button
+			size_hint_x: [.4, None]
+			pos_hint: { "x": .8 }
+			style: "filled"
+			label: "Done"
+			on_press: root.transfor()
+
+<GroupingToCategoryScreen>:
+	BoxLayout:
+		orientation: 'vertical'
+		adaptive_height: True
+		padding: "24dp", 0, 0, 0
+		spacing: "12dp"
+		size_hint: [0.8, .9]
+		pos_hint: {"center_x": .5, "center_y": .5}
+
+		MyDivider:	
+		FileSelector:
+			id: id_file_dir
+			title_name: "Select input XML, CSV or Excel file"
+			selections:["none"]
+			size_hint: [1, .6]
+
+		FilesSelector:
+			default_language: ""
+			is_editable: False
+			ui_content: id_recycler_view
+			id: id_rule_files
+			title_name: "Select input rule xml files"
+			size_hint: [1, 1.4]
+
+			MDRecycleView:
+				id: id_recycler_view
+				data: root.ids.id_rule_files.selections
+				viewclass: 'Cell'
+				RecycleBoxLayout:
+					default_size: None, dp(56)
+					default_size_hint: 1, None
+					size_hint_y: None
+					height: self.minimum_height
+					orientation: 'vertical'
+
+		DirSelector:
+			id: id_export_dir
+			title_name: "Select the output folder"
+			selections: ["none"]
+			size_hint: [1, .6]
+		CheckItem:
+			id: id_is_csv
+			text: "output file as .csv, default is .xlsx"
+			group: "root"
+		
+		CheckItem:
 			id: id_is_sorted
 			text: "sort the strings by ID"
 			group: "root"
 
 		CheckItem:
-			id: id_is_csv
-			text: "output file as .csv, default is .xlsx"
-			group: "root"	
+			id: id_is_show_old
+			text: "add column of rules table into output file"
+			group: "root"		
 
 		MyDivider:
 		
