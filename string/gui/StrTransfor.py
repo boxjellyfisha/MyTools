@@ -11,6 +11,7 @@ from kivy.clock import Clock
 from kivy.logger import Logger
 
 from cmd import str_translator as strTranslator
+from gui.snackbar_hint import Snackbar
 
 from plyer import filechooser
 
@@ -25,6 +26,7 @@ class StrTransforScreen(MDScreen):
 	'''
 
 	callback = None
+	hint = Snackbar()
 
 	def __init__(self, *args, **kwargs):
 		super(StrTransforScreen, self).__init__(*args, **kwargs)
@@ -43,8 +45,13 @@ class StrTransforScreen(MDScreen):
 		is_sorted = self.ids.id_is_sorted.isChecked()
 
 		Logger.info(f"try...{str(file_dir)}, {str(export_dir)}, {is_category_sliced}, {is_sorted}")
-		strTranslator.trans(file_dir=file_dir, export_dir= export_dir, 
-					  	    is_category_sliced= is_category_sliced, is_sort= is_sorted)
+		try:
+			strTranslator.trans(file_dir=file_dir, export_dir= export_dir, 
+								is_category_sliced= is_category_sliced, is_sort= is_sorted)
+			self.hint.show(content="File generating is success!", output = export_dir)
+		except Exception as e:
+			Logger.error(e)
+			self.hint.show(content="Failed by:" + str(e))
 
 class SmallButton(MDButton):
 	ui_text = ObjectProperty()

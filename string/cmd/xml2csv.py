@@ -16,11 +16,14 @@ def main(arg):
 	output_file_path = arg.output
 	is_sort_by_alphabet = arg.sort
 
-	return trans(lang_types, xmls, output_file_path, is_sort_by_alphabet)
+	try:
+		trans(lang_types, xmls, output_file_path, is_sort_by_alphabet)
+	except Exception as e:
+		print(e)
 
 def trans(lang_types, file_xmls, output_file_path, is_sort):
 	if not is_args_valid(lang_types, file_xmls, output_file_path):
-		return
+		return 
 
 	select_df = xmls_to_data_frame(lang_types, file_xmls, is_sort)
 	return data_frame_to_table_file(output_file_path, select_df) 
@@ -53,15 +56,15 @@ def xmls_to_data_frame(lang_types, xmls, is_sort_by_alphabet):
 	return select_df
 
 def is_args_valid(lang_types, xmls, output_file_path):
-    is_valid_args = True
-    if len(lang_types) != len(xmls):
-     print("The input count isnot same!")
-     is_valid_args = False
+	is_valid_args = True
+	if len(lang_types) != len(xmls):
+		is_valid_args = False
+		raise Exception("The input count isnot same!")
 	
-    if output_file_path == '' or len(xmls) == 0:
-     print("The input is missed!")
-     is_valid_args = False
-    return is_valid_args
+	if output_file_path == '' or len(xmls) == 0:
+		is_valid_args = False
+		raise Exception("The input is missed!")
+	return is_valid_args
 
 def data_frame_to_table_file(output_file_path, select_df):
 	file_type = output_file_path.split(".")[1]
@@ -74,8 +77,7 @@ def data_frame_to_table_file(output_file_path, select_df):
 		with pd.ExcelWriter(output_file_path) as writer:
 			select_df.to_excel(writer,index=False)
 	else:
-		print("The input file type is not support!")
-		return
+		raise Exception("The input file type is not support!")
 
 """ Documents
 return the maps which is an array contains the xml files' dictinary.

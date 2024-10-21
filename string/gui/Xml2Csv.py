@@ -12,6 +12,7 @@ from kivy.clock import Clock
 from kivy.logger import Logger
 
 from cmd import xml2csv as xml2csv
+from gui.snackbar_hint import Snackbar
 
 from plyer import filechooser
 
@@ -26,6 +27,7 @@ class Xml2CsvScreen(MDScreen):
 	'''
 
 	callback = None
+	hint = Snackbar()
 
 	def __init__(self, *args, **kwargs):
 		super(Xml2CsvScreen, self).__init__(*args, **kwargs)
@@ -45,10 +47,15 @@ class Xml2CsvScreen(MDScreen):
 		is_sorted = self.ids.id_is_sorted.isChecked()
 
 		Logger.info("try..." + str(languges) + "; " + str(file_dir) + "; " + str(export_dir) + "; " + str(is_sorted))
-		xml2csv.trans(lang_types = languges.split(","),
+		try:
+			xml2csv.trans(lang_types = languges.split(","),
 				file_xmls = file_dir.split(","), 
 				output_file_path = export_dir, 
 				is_sort = is_sorted)
+			self.hint.show(content="File generating is success!", output = export_dir)
+		except Exception as e:
+			Logger.error(e)
+			self.hint.show(content="Failed by:" + str(e))
 
 class FilesSelector(MDBoxLayout):
 	ui_button = ObjectProperty()

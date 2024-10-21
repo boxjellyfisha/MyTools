@@ -14,17 +14,18 @@ def main(args):
 	# global export_dir 
 	export_dir = args.output
 	is_category_sliced = args.category_sliced
-
-	trans(file_dir, export_dir, is_category_sliced, args.sort)
+	try:
+		trans(file_dir, export_dir, is_category_sliced, args.sort)
+	except Exception as e:
+		print(e)		
 
 def trans(file_dir, export_dir, is_category_sliced, is_sort):
 	if file_dir == '' or export_dir == '':
-		print("The input is missed!")
-		return
+		raise Exception("The input is missed!")
 
 	df = to_data_frame(file_dir, is_sort) 
 	if(df is None):
-		return
+		raise Exception("The data frame is missed!") 
 
 	data_frame_to_strings_file(export_dir, df, is_category_sliced)	
 
@@ -37,8 +38,7 @@ def to_data_frame(file_path, is_sort_by_alphabet):
 	elif file_type == "xls":  # before year 2010
 		df = pd.read_excel(file_path)
 	else: 
-		print("The input file type is not support!")
-		return
+		raise Exception("The input file type is not support!")
 	
 	if(is_sort_by_alphabet):
 		df = df.sort_values(by=ID)
@@ -47,12 +47,12 @@ def to_data_frame(file_path, is_sort_by_alphabet):
 
 def data_frame_to_strings_file(export_dir, df, is_category_sliced):
     lang_count = df.columns.size
-    categorys = df[ID_CATEGORY]
+    categorys = df[ID_CATEGORY] if ID_CATEGORY in df.columns else list()
 
     for i in range(1, lang_count):
      lang = str(df.columns[i])
      if lang != 'nan' and lang != ID_CATEGORY:
-      if(is_category_sliced):
+      if(is_category_sliced and len(categorys) > 0):
        transform_to_multiple_files(df, export_dir, lang, categorys)
       else:	
        transform_to_single_file(df, export_dir, lang, "strings")
