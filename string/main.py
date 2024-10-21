@@ -15,6 +15,9 @@ from gui.StrTransfor import StrTransforScreen
 
 from kivymd.uix.screen import MDScreen
 
+import os
+os.environ["SDL_MOUSE_FOCUS_CLICKTHROUGH"] = '1'
+
 class StringToolsApp(MDApp):
     
     def build(self):
