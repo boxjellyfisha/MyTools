@@ -1,0 +1,246 @@
+#:kivy 2.3.0
+#:import pages gui.pages
+#:import PAGE_STR_TRANSLATOR gui.pages.PAGE_STR_TRANSLATOR
+#:import PAGE_XML_CSV gui.pages.PAGE_XML_CSV
+#:import PAGE_GROUPING_CATEGORY gui.pages.PAGE_GROUPING_CATEGORY
+#:import FadeTransition kivy.uix.screenmanager.FadeTransition
+
+<Title@MDLabel>
+	halign: "center"
+	font_style: "Display"
+	role: "small"
+
+<HintLabel@MDLabel>
+	font_style: "Label"
+	role: "medium"
+
+<MenuItemButton@MDButton>
+	evlation: dp(10)
+	radius: dp(6)
+	theme_width: "Custom"
+	height: "50dp"
+	size_hint_x: 1
+
+<MyDivider@MDDivider>
+	size_hint_x: 1
+	pos_hint: {'center_x': .5, 'center_y': .5}
+	divider_width: dp(14)
+	color: (0,0,0,0)
+
+<MenuScreen>:
+	id: parent_screen_id
+	label_wid: label_custom_wid
+	navigator: navigator_id
+
+	DrawerNavigation:
+		id: navigator_id
+		size_hint: 1,1
+
+	ScreenManager:
+		id: screen_manager
+		transition:
+			FadeTransition(duration=.2, clearcolor=(0,0,0,0))	
+
+	HintLabel:
+		padding_x: dp(20)
+		padding_y: dp(50)
+		id: label_custom_wid
+		text: pages.PAGE_MENU
+		size_hint: 1,.1
+
+<CommonNavigationRailItem>:
+	MDNavigationRailItemIcon:
+		icon: root.icon
+	MDNavigationRailItemLabel:
+		text: root.text
+
+<DrawerNavigation>:
+	type: "selected"
+
+	CommonNavigationRailItem:
+		icon: "home"
+		text: pages.PAGE_MENU
+		on_active: root.switch_item(pages.PAGE_MENU)
+
+	CommonNavigationRailItem:
+		icon: "transition"
+		text: PAGE_STR_TRANSLATOR
+		on_active: root.switch_item(PAGE_STR_TRANSLATOR)
+
+	CommonNavigationRailItem:
+		icon: "xml"
+		text: PAGE_XML_CSV
+		on_active: root.switch_item(PAGE_XML_CSV)
+
+	CommonNavigationRailItem:
+		icon: "group"
+		text: PAGE_GROUPING_CATEGORY	
+		on_active: root.switch_item(PAGE_GROUPING_CATEGORY)
+
+<HomeScreen>:
+	RelativeLayout:
+		size_hint: 1, 1
+		Title:
+			text: "String table tools menu"
+			pos_hint: {'center_x': .5, 'y': .8}
+			size_hint: 1,.1
+
+		MDBoxLayout:
+			border: 10, 10, 10, 10
+			orientation: "vertical"
+			padding: 20
+			pos_hint: {"center_x": 0.5 }
+			size_hint: .6,.7
+
+			MenuItemButton:
+				on_press: root.do_str_translator()    
+				MDButtonText:
+					pos_hint: {"center_x": .5, "center_y": .5}
+					text: PAGE_STR_TRANSLATOR
+			HintLabel:
+				text: "Parse CSV/Excel files, extract strings, and generate string files suitable for Android and iOS development"
+			MyDivider:
+
+			MenuItemButton:
+				on_press: root.do_xml2csv()
+				MDButtonText:
+					pos_hint: {"center_x": .5, "center_y": .5}
+					text: PAGE_XML_CSV
+			HintLabel:
+				text: "Strings from Android XML files and write them to a CSV/Excel file."  
+			MyDivider:
+
+			MenuItemButton:
+				on_press: root.do_grouping_to_category()
+				MDButtonText:
+					pos_hint: {"center_x": .5, "center_y": .5}
+					text: PAGE_GROUPING_CATEGORY
+			HintLabel:
+				text: "Grouping strings from Android XML files."
+			MyDivider:
+
+
+<CheckItem>
+	adaptive_height: True
+
+	MDCheckbox:
+		id: id_check_box
+	MDLabel:
+		text: root.text
+		adaptive_height: True
+		padding_x: "12dp"
+		pos_hint: {"center_y": .5}
+
+<StrTransforScreen>:
+	BoxLayout:
+		orientation: 'vertical'
+		adaptive_height: True
+		padding: "24dp", 0, 0, 0
+		spacing: "12dp"
+		size_hint: [0.8, .6]
+		pos_hint: {"center_x": .5, "center_y": .5}		
+	
+		FileSelector:
+			id: id_file_dir
+			title_name: "Select input CSV or Excel file"
+			selections:["none"]
+
+		DirSelector:
+			id: id_export_dir
+			title_name: "Select the output folder"
+			selections: ["none"]
+
+		CheckItem:
+			id: id_is_sorted
+			text: "sort the strings by ID"
+			group: "root"
+
+		CheckItem:
+			id: id_is_category_sliced
+			text: "seperate the files by category"
+			group: "root"
+		MyDivider:
+		
+		SmallButton:
+			size_hint_x: [.4, None]
+			pos_hint: { "x": .8 }
+			style: "filled"
+			label: "Done"
+			on_press: root.transfor()
+
+
+<Cell>:
+	ui_text_field: id_language
+	adaptive_height: True
+	padding: "10dp", "10dp", "10dp", "10dp"
+	MDButton:
+		id: id_remove
+		MDButtonIcon:
+			adaptive_width: True
+			icon: "minus"
+	
+	MDTextField:
+		id: id_language
+		mode: "outlined"	
+		size_hint_x: None
+		width: dp(100)
+		MDTextFieldHintText:
+			text: "Language"
+
+	MDLabel:
+		text: root.text
+		adaptive_height: True
+		padding_x: "12dp"
+		pos_hint: {"center_y": .5}
+
+<Xml2CsvScreen>:
+	BoxLayout:
+		orientation: 'vertical'
+		adaptive_height: True
+		padding: "24dp", 0, 0, 0
+		spacing: "12dp"
+		size_hint: [0.8, .9]
+		pos_hint: {"center_x": .5, "center_y": .5}
+
+		MyDivider:	
+		FilesSelector:
+			ui_content: id_recycler_view
+			id: id_file_dir
+			title_name: "Select input xml files"
+			size_hint: [1, 1.5]
+
+			MDRecycleView:
+				id: id_recycler_view
+				data: root.ids.id_file_dir.selections
+				viewclass: 'Cell'
+				RecycleBoxLayout:
+					default_size: None, dp(56)
+					default_size_hint: 1, None
+					size_hint_y: None
+					height: self.minimum_height
+					orientation: 'vertical'
+
+		DirSelector:
+			id: id_export_dir
+			title_name: "Select the output folder"
+			selections: ["none"]
+			size_hint: [1, .5]
+
+		CheckItem:
+			id: id_is_sorted
+			text: "sort the strings by ID"
+			group: "root"
+
+		CheckItem:
+			id: id_is_csv
+			text: "output file as .csv, default is .xlsx"
+			group: "root"	
+
+		MyDivider:
+		
+		SmallButton:
+			size_hint_x: [.4, None]
+			pos_hint: { "x": .8 }
+			style: "filled"
+			label: "Done"
+			on_press: root.transfor()

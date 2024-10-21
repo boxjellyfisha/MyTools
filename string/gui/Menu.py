@@ -8,7 +8,7 @@ from kivy.properties import ObjectProperty, ColorProperty
 from kivy.lang import Builder
 from kivymd.uix.screen import MDScreen
 
-from func.pages import PAGE_MENU,PAGE_STR_TRANSLATOR,PAGE_XML_CSV,PAGE_GROUPING_CATEGORY
+from .pages import PAGE_MENU,PAGE_STR_TRANSLATOR,PAGE_XML_CSV,PAGE_GROUPING_CATEGORY
 
 class MenuScreen(FloatLayout): # inherent FloatLayout
     '''Create a controller that receives a custom widget from the kv lang file.

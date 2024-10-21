@@ -7,7 +7,7 @@ from kivy.properties import StringProperty, ObjectProperty, NumericProperty
 from kivy.logger import Logger
 
 
-from func.pages import PAGE_MENU, PAGE_STR_TRANSLATOR, PAGE_XML_CSV, PAGE_GROUPING_CATEGORY
+from .pages import PAGE_MENU, PAGE_STR_TRANSLATOR, PAGE_XML_CSV, PAGE_GROUPING_CATEGORY
 
 class DrawerNavigation(MDNavigationRail):
     switch_screen = ObjectProperty()
@@ -23,7 +23,7 @@ class DrawerNavigation(MDNavigationRail):
             if item.text == page_name:
                 required_item = item
                 break
-        Logger.info(f"get_item : {required_item.text if required_item else "none"}")
+        Logger.info(f"get_item : {required_item.text if required_item else 'none'}")
         return required_item
 
 
@@ -34,7 +34,7 @@ class DrawerNavigation(MDNavigationRail):
             if item.active:
                 active_item = item
                 break
-        Logger.info(f"get_active_item : {active_item.text if active_item else "none"}")    
+        Logger.info(f"get_active_item : {active_item.text if active_item else 'none'}")    
         return active_item
     
     def active_page(self, page_name):
@@ -56,7 +56,7 @@ class DrawerNavigation(MDNavigationRail):
             return
         
         self.current_page = page_name
-        Logger.info(f"switch_item {page_name}, {self.get_active_item().text if self.get_active_item() else "None"}, c= {self.current_page}")
+        Logger.info(f"switch_item {page_name}, {self.get_active_item().text if self.get_active_item() else 'None'}, c= {self.current_page}")
         self.switch_screen(page_name)
 
 class CommonNavigationRailItem(MDNavigationRailItem):
